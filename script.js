@@ -1,12 +1,9 @@
 function analizar(){
 
 const texto =
-document
-.getElementById("descripcion")
-.value
-.toLowerCase();
+document.getElementById("descripcion").value.toLowerCase();
 
-let resultados=[];
+let resultado = "";
 
 if(
 texto.includes("neurologia") ||
@@ -14,35 +11,12 @@ texto.includes("migraña") ||
 texto.includes("cefalea")
 ){
 
-resultados.push({
-nombre:"ESPECIALIDADES MÉDICAS > NEUROLOGÍA",
-puntaje:95
-});
-
-}
-
-if(
-texto.includes("cardiologia") ||
-texto.includes("hipertension")
-){
-
-resultados.push({
-nombre:"ESPECIALIDADES MÉDICAS > CARDIOLOGÍA",
-puntaje:90
-});
-
-}
-
-if(
-texto.includes("medicamento") ||
-texto.includes("farmacia") ||
-texto.includes("entrega")
-){
-
-resultados.push({
-nombre:"MEDICAMENTOS",
-puntaje:90
-});
+resultado += `
+<div class="card">
+<h3>ESPECIALIDADES MÉDICAS > NEUROLOGÍA</h3>
+<p>Confianza: 95%</p>
+</div>
+`;
 
 }
 
@@ -51,42 +25,25 @@ texto.includes("prestador") ||
 texto.includes("ips")
 ){
 
-resultados.push({
-nombre:"CAMBIO DE PRESTADOR",
-puntaje:85
-});
+resultado += `
+<div class="card">
+<h3>CAMBIO DE PRESTADOR</h3>
+<p>Confianza: 85%</p>
+</div>
+`;
 
 }
 
-if(resultados.length===0){
+if(resultado===""){
 
-document.getElementById("resultado").innerHTML=
-`
+resultado = `
 <div class="card">
 No se encontraron coincidencias.
 </div>
 `;
 
-return;
-
 }
 
-resultados.sort((a,b)=>b.puntaje-a.puntaje);
-
-document.getElementById("resultado").innerHTML=
-
-resultados.map(r=>`
-
-<div class="card">
-
-<h3>${r.nombre}</h3>
-
-<div class="puntaje">
-Confianza: ${r.puntaje}%
-</div>
-
-</div>
-
-`).join("");
+document.getElementById("resultado").innerHTML = resultado;
 
 }
