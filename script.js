@@ -1,49 +1,96 @@
-function analizar() {
+let catalogo = [];
+
+fetch("tipificaciones.json")
+.then(respuesta => respuesta.json())
+.then(datos => {
+
+    catalogo = datos;
+
+    console.log("Tipificaciones cargadas:", catalogo);
+
+});
+
+function analizar(){
 
     const texto =
-    document.getElementById("descripcion").value.toLowerCase();
+    document.getElementById("descripcion")
+    .value
+    .toLowerCase();
 
-    let resultado = "";
+    let resultados = [];
 
-    if (
-        texto.includes("neurologia") ||
-        texto.includes("migraña") ||
-        texto.includes("cefalea")
-    ) {
+    catalogo.forEach(item => {
 
-        resultado += `
-        <div class="card">
-            <h3>ESPECIALIDADES MÉDICAS > NEUROLOGÍA</h3>
-            <p>Confianza: 95%</p>
-        </div>
-        `;
+        let score = 0;
 
-    }
+        item.keywords.forEach(keyword => {
 
-    if (
-        texto.includes("prestador") ||
-        texto.includes("ips")
-    ) {
+            if(texto.includes(keyword.toLowerCase())){
 
-        resultado += `
-        <div class="card">
-            <h3>CAMBIO DE PRESTADOR</h3>
-            <p>Confianza: 85%</p>
-        </div>
-        `;
+                score++;
 
-    }
+            }
 
-    if (resultado === "") {
+        });
 
-        resultado = `
+        if(score > 0){
+
+            resultados.push({
+
+                ...item,
+                score
+
+            });
+
+        }
+
+    });
+
+    resultados.sort(
+        (a,b) => b.score - a.score
+    );
+
+    mostrarResultados(
+        resultados.slice(0,3)
+    );
+
+}
+
+function mostrarResultados(resultados){
+
+    const contenedor =
+    document.getElementById("resultado");
+
+    if(resultados.length === 0){
+
+        contenedor.innerHTML = `
         <div class="card">
             No se encontraron coincidencias.
         </div>
         `;
 
+        return;
+
     }
 
-    document.getElementById("resultado").innerHTML = resultado;
+    contenedor.innerHTML = resultados.map(r => `
+
+        <div class="card">
+
+            <h3>${r.nombre}</h3>
+
+            <p><b>Macromotivo:</b> ${r.macromotivo}</p>
+
+            <p><b>Motivo General:</b> ${r.motivoGeneral}</p>
+
+            <p><b>Tipo:</b> ${r.tipo}</p>
+
+            <p><b>Subtipo:</b> ${r.subtipo}</p>
+
+            <p><b>Coincidencias:</b> ${r.score}</p>
+
+        </div>
+
+    `).join("");
 
 }
