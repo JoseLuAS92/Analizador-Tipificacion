@@ -1,58 +1,31 @@
 let catalogo = [];
 
-async function cargarCSV() {
+fetch("tipificaciones.json")
+.then(respuesta => respuesta.json())
+.then(datos => {
 
-    const respuesta =
-    await fetch("Tabla Tipificaciones.csv");
+    catalogo = datos;
 
-    const texto =
-    await respuesta.text();
+    console.log("Tipificaciones cargadas:", catalogo);
 
-    const filas =
-    texto.split("\n");
-
-    catalogo = filas;
-
-    console.log(
-        "Filas cargadas:",
-        filas.length
-    );
-
-}
-
-cargarCSV();
+});
 
 function analizar(){
 
-    const descripcion =
-    document
-    .getElementById("descripcion")
+    const texto =
+    document.getElementById("descripcion")
     .value
-    .toUpperCase();
+    .toLowerCase();
 
-    let coincidencias = [];
+    let resultados = [];
 
-    catalogo.forEach(fila => {
-
-        if(!fila)
-            return;
+    catalogo.forEach(item => {
 
         let score = 0;
 
-        const columnas =
-        fila.split(";");
+        item.keywords.forEach(keyword => {
 
-        columnas.forEach(columna => {
-
-            const valor =
-            columna
-            .trim()
-            .toUpperCase();
-
-            if(
-                valor.length > 4 &&
-                descripcion.includes(valor)
-            ){
+            if(texto.includes(keyword.toLowerCase())){
 
                 score++;
 
@@ -62,9 +35,9 @@ function analizar(){
 
         if(score > 0){
 
-            coincidencias.push({
+            resultados.push({
 
-                fila,
+                ...item,
                 score
 
             });
@@ -73,42 +46,51 @@ function analizar(){
 
     });
 
-    coincidencias.sort(
-        (a,b)=>b.score-a.score
+    resultados.sort(
+        (a,b) => b.score - a.score
     );
 
-    let html = "";
+    mostrarResultados(
+        resultados.slice(0,3)
+    );
 
-    coincidencias
-    .slice(0,5)
-    .forEach(c => {
+}
 
-        html += `
+function mostrarResultados(resultados){
+
+    const contenedor =
+    document.getElementById("resultado");
+
+    if(resultados.length === 0){
+
+        contenedor.innerHTML = `
         <div class="card">
-            <b>Coincidencias:</b>
-            ${c.score}
-
-            <br><br>
-
-            ${c.fila}
+            No se encontraron coincidencias.
         </div>
         `;
 
-    });
-
-    if(html===""){
-
-        html = `
-        <div class="card">
-            No se encontraron
-            coincidencias.
-        </div>
-        `;
+        return;
 
     }
 
-    document
-    .getElementById("resultado")
-    .innerHTML = html;
+    contenedor.innerHTML = resultados.map(r => `
+
+        <div class="card">
+
+            <h3>${r.nombre}</h3>
+
+            <p><b>Macromotivo:</b> ${r.macromotivo}</p>
+
+            <p><b>Motivo General:</b> ${r.motivoGeneral}</p>
+
+            <p><b>Tipo:</b> ${r.tipo}</p>
+
+            <p><b>Subtipo:</b> ${r.subtipo}</p>
+
+            <p><b>Coincidencias:</b> ${r.score}</p>
+
+        </div>
+
+    `).join("");
 
 }
