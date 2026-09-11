@@ -1,0 +1,46 @@
+[
+  {
+    "nombre":"FALTA DE OPORTUNIDAD EN LAS CITAS O CONSULTAS",
+    "macromotivo":"BARRERAS EN EL ACCESO",
+    "motivoGeneral":"FALTA DE OPORTUNIDAD",
+    "tipo":"ESPECIALIDADES MÉDICAS",
+    "subtipo":"NEUROLOGÍA",
+    "keywords":[
+      "neurologia",
+      "neurólogo",
+      "migraña",
+      "cefalea",
+      "cita",
+      "consulta",
+      "agenda"
+    ]
+  },
+
+  {
+    "nombre":"FALTA DE OPORTUNIDAD EN LA ENTREGA",
+    "macromotivo":"BARRERAS EN EL ACCESO",
+    "motivoGeneral":"FALTA DE OPORTUNIDAD",
+    "tipo":"MEDICAMENTOS",
+    "subtipo":"MEDICAMENTOS UPC",
+    "keywords":[
+      "medicamento",
+      "farmacia",
+      "entrega",
+      "formula"
+    ]
+  },
+
+  {
+    "nombre":"CAMBIO DE PRESTADOR",
+    "macromotivo":"TRÁMITES ADMINISTRATIVOS",
+    "motivoGeneral":"LIBRE ESCOGENCIA",
+    "tipo":"PRESTADOR",
+    "subtipo":"IPS",
+    "keywords":[
+      "prestador",
+      "ips",
+      "cambio",
+      "red"
+    ]
+  }
+]
